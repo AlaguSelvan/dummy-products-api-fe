@@ -5,24 +5,41 @@ import { useParams } from 'react-router-dom';
 
 import { API_BASE } from '../Constants/API.ts';
 import { Product } from '../Types/Constants.ts';
+import { useAppContext } from '../context/AppProvider.tsx';
+import useDebounce from '../Hooks/useDebounce.ts';
 
+interface ProductResponse {
+    products: Product[];
+}
 
 const CategoryPage = () => {
     const { categoryName } = useParams();
+    const { state } = useAppContext();
+    const { searchQuery } = state;
     const [products, setProducts] = useState<Product[]>([]);
+
+    const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
     useEffect(() => {
         const fetchCategoryProducts = async () => {
             try {
-                const { data } = await axios.get(`${API_BASE}/category/${categoryName}`) as unknown as { data: { products: Product[] } };
-                setProducts(data.products);
+                let url = `${API_BASE}/category/${categoryName}`;
+                if (debouncedSearchQuery) {
+                    url = `${API_BASE}/search?q=${debouncedSearchQuery}`;
+                }
+
+                const { data } = await axios.get<ProductResponse>(url);
+                const filteredProducts = data.products.filter(
+                    (product: Product) => product.category.toLowerCase() === categoryName?.toLowerCase()
+                );
+                setProducts(filteredProducts);
             } catch (error) {
                 console.error('Error fetching category products:', error);
             }
         };
 
         fetchCategoryProducts();
-    }, [categoryName]);
+    }, [categoryName, debouncedSearchQuery]);
 
     return (
         <div className="category-page">

@@ -13,7 +13,6 @@ const CategoryFilter = () => {
         const fetchCategories = async () => {
             try {
                 const { data } = await axios.get(`${API_BASE}/categories`);
-                console.log("Fetched categories:", data); // Debugging log
                 dispatch({ type: 'SET_CATEGORIES', payload: data });
             } catch (error) {
                 console.error('Error fetching categories:', error);

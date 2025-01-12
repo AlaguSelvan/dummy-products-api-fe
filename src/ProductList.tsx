@@ -16,7 +16,6 @@ const ProductList = () => {
             try {
                 let url = API_BASE;
 
-                // Adjust URL based on search query and category selection
                 if (debouncedSearchQuery && selectedCategory) {
                     url = `${API_BASE}/search?q=${debouncedSearchQuery}&category=${selectedCategory}`;
                 } else if (debouncedSearchQuery) {

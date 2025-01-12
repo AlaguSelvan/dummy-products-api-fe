@@ -14,7 +14,6 @@ const CategoriesOverview = () => {
                         <h3>{category}</h3>
                     </Link>
                 ) : (
-                    // Assuming category is an object with `name` and `slug`
                     <Link key={category.slug} to={`/categories/${category.slug}`} className="category-card">
                         <h3>{category.name}</h3>
                     </Link>
