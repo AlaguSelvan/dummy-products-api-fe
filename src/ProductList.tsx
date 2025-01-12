@@ -3,10 +3,6 @@ import axios from 'axios';
 import { useAppContext } from './context/AppProvider.tsx';
 import { API_BASE } from './Constants/API.ts';
 import useDebounce from './Hooks/useDebounce.ts';
-import { Product } from './Types/Constants.ts';
-
-
-
 
 
 const ProductList = () => {
@@ -19,10 +15,17 @@ const ProductList = () => {
         const fetchProducts = async () => {
             try {
                 let url = API_BASE;
-                if (debouncedSearchQuery) url = `${API_BASE}/search?q=${debouncedSearchQuery}`;
-                else if (selectedCategory) url = `${API_BASE}/category/${selectedCategory}`;
 
-                const { data } = await axios.get(url) as unknown as { data: { products: Product[] } };
+                // Adjust URL based on search query and category selection
+                if (debouncedSearchQuery && selectedCategory) {
+                    url = `${API_BASE}/search?q=${debouncedSearchQuery}&category=${selectedCategory}`;
+                } else if (debouncedSearchQuery) {
+                    url = `${API_BASE}/search?q=${debouncedSearchQuery}`;
+                } else if (selectedCategory) {
+                    url = `${API_BASE}/category/${selectedCategory}`;
+                }
+
+                const { data } = await axios.get(url);
                 dispatch({ type: 'SET_PRODUCTS', payload: data.products });
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -45,6 +48,7 @@ const ProductList = () => {
         </div>
     );
 };
+
 
 
 export default ProductList;

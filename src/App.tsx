@@ -17,9 +17,6 @@ const App = () => (
           <h1>Product Search</h1>
           <SearchBar />
           <CategoryFilter />
-          <nav>
-            <Link to="/">Home</Link>
-          </nav>
         </header>
         <main>
           <Routes>
