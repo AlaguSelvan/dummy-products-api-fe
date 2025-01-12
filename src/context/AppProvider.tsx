@@ -1,4 +1,5 @@
 import React, { useContext, useReducer, createContext } from 'react';
+import { Action, AppState } from '../Types/Constants';
 
 
 const initialState: AppState = {
@@ -7,7 +8,6 @@ const initialState: AppState = {
     searchQuery: '',
     selectedCategory: '',
 };
-
 
 export const AppContext = createContext<{ state: AppState; dispatch: React.Dispatch<Action> } | undefined>(undefined);
 

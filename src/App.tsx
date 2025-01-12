@@ -5,23 +5,39 @@ import SearchBar from './SearchBar.tsx';
 import CategoryFilter from './CategoryFilter.tsx';
 import ProductList from './ProductList.tsx';
 import { AppProvider } from './context/AppProvider.tsx'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import CategoriesOverview from './Pages/CategoryOverview.tsx';
+import CategoryPage from './Pages/CategoryPage.tsx';
 
-const App = () => {
-  return (
-    <AppProvider>
-    <div className="app">
-      <header>
-        <h1>Product Search</h1>
-        <SearchBar />
+const App = () => (
+  <AppProvider>
+    <Router>
+      <div className="app">
+        <header className="app-header">
+          <h1>Product Search</h1>
+          <SearchBar />
           <CategoryFilter />
-      </header>
-      <main>
-        <ProductList />
-      </main>
-    </div>
-    </AppProvider>
-  );
-}
+          <nav>
+            <Link to="/">Home</Link>
+          </nav>
+        </header>
+        <main>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <ProductList />
+                </>
+              }
+            />
+            <Route path="/categories/:categoryName" element={<CategoryPage />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
+  </AppProvider>
+);
 
 export default App;
 

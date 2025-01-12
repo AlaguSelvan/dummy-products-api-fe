@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useAppContext } from './context/AppProvider.tsx';
 import { API_BASE } from './Constants/API.ts';
+import useDebounce from './Hooks/useDebounce.ts';
+import { Product } from './Types/Constants.ts';
 
 
 
@@ -11,15 +13,16 @@ const ProductList = () => {
     const { state, dispatch } = useAppContext();
     const { products, searchQuery, selectedCategory } = state;
 
+    const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 let url = API_BASE;
-                if (searchQuery) url = `${API_BASE}/search?q=${searchQuery}`;
+                if (debouncedSearchQuery) url = `${API_BASE}/search?q=${debouncedSearchQuery}`;
                 else if (selectedCategory) url = `${API_BASE}/category/${selectedCategory}`;
 
                 const { data } = await axios.get(url) as unknown as { data: { products: Product[] } };
-                console.log("data", data)
                 dispatch({ type: 'SET_PRODUCTS', payload: data.products });
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -27,7 +30,7 @@ const ProductList = () => {
         };
 
         fetchProducts();
-    }, [searchQuery, selectedCategory, dispatch]);
+    }, [debouncedSearchQuery, selectedCategory, dispatch]);
 
     return (
         <div className="product-list">

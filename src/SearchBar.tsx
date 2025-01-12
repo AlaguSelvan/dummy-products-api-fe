@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useAppContext } from './context/AppProvider.tsx';
 
 
@@ -10,7 +10,7 @@ const SearchBar = () => {
         dispatch({ type: 'SET_SEARCH_QUERY', payload: e.target.value });
     };
 
-    return <input type="text" placeholder="Search products..." onChange={handleSearch} />;
+    return <input className="search-bar" type="text" placeholder="Search products..." onChange={handleSearch} />;
 };
 
 export default SearchBar
